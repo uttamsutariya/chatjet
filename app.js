@@ -20,8 +20,10 @@ app.use(
 
 // routes
 const userRoute = require("./routes/user");
+const chatRoute = require("./routes/chat");
 
 app.use("/api/user", userRoute);
+app.use("/api/chat", chatRoute);
 
 app.get("/", (req, res) => {
 	res.send("<h1>ChatJet🚀 API is awesome</h1>");
