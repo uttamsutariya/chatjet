@@ -1,13 +1,33 @@
-require("dotenv").config();
-const app = require("express")();
-const { chats } = require("./data/data.js");
+const express = require("express");
+const globalErrorHandler = require("./middlewares/globalErrorHandler");
+const cookieParser = require("cookie-parser");
+const fileUpload = require("express-fileupload");
 
-app.get("/api/chat", (req, res) => {
-	res.send(chats);
+// app initialization
+const app = express();
+
+// middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use(cookieParser());
+app.use(
+	fileUpload({
+		useTempFiles: true,
+		tempFileDir: "./temp",
+	})
+);
+
+// routes
+const userRoute = require("./routes/user");
+
+app.use("/api/user", userRoute);
+
+app.get("/", (req, res) => {
+	res.send("<h1>ChatJet🚀 API is awesome</h1>");
 });
 
-app.get("/api/chat/id", (req, res) => {});
+// error handling
+app.use(globalErrorHandler);
 
-const PORT = process.env.PORT || 5050;
-
-app.listen(PORT, () => console.log(`App server started on port:${PORT}`));
+module.exports = app;

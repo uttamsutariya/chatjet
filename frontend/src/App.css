@@ -1,0 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik&display=swap");
+
+.app {
+	min-height: 100vh;
+	display: flex;
+	font-family: "Rubik", sans-serif;
+	background-image: url("./assets/images/bg3.jpg");
+	background-size: cover;
+	background-position: center;
+}
