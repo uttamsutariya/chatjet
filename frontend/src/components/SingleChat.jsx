@@ -11,6 +11,13 @@ import UpdateGroupChatModel from "./miscellaneous/UpdateGroupChatModel";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import ScrollableChat from "./miscellaneous/ScrollableChat";
+import Typing from "../assets/animations/typing.gif";
+
+// socket
+
+import io from "socket.io-client";
+const ENDPOINT = "http://localhost:5050";
+let socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 	const { user } = useAuthState();
@@ -18,9 +25,40 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 	const [messages, setMessages] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [newMessage, setNewMessage] = useState("");
+	const [socketConnected, setSocketConnected] = useState(false);
+	const [typing, setTyping] = useState(false);
+	const [isTyping, setIsTyping] = useState(false);
+
+	useEffect(() => {
+		socket = io(ENDPOINT);
+
+		socket.emit("setup", user);
+		socket.on("connected", () => setSocketConnected(true));
+
+		socket.on("typing", () => setIsTyping(true));
+		socket.on("stop typing", () => setIsTyping(false));
+	}, []);
+
+	useEffect(() => {
+		fetchMessages();
+
+		selectedChatCompare = selectedChat;
+	}, [selectedChat]);
+
+	useEffect(() => {
+		socket.on("message received", (newMessage) => {
+			if (!selectedChatCompare || selectedChatCompare._id != newMessage.chat._id) {
+				// give notification
+			} else {
+				// add to list of messages
+				setMessages([...messages, newMessage]);
+			}
+		});
+	});
 
 	const sendMessage = async (e) => {
 		if (e.key == "Enter" && newMessage) {
+			socket.emit("stop typing", selectedChat._id);
 			try {
 				setNewMessage("");
 
@@ -32,6 +70,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 					message: newMessage,
 					chatId: selectedChat._id,
 				});
+
+				socket.emit("new message", message);
 
 				setMessages([...messages, message]);
 			} catch (error) {
@@ -52,6 +92,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
 			setMessages(messages);
 			setLoading(false);
+
+			// join new room based on selected chat
+			socket.emit("join chat", selectedChat._id);
 		} catch (error) {
 			toast.error("Failed to load the messages");
 		}
@@ -61,11 +104,25 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 		setNewMessage(e.target.value);
 
 		// typing indicator logic
-	};
+		if (!socketConnected) return;
 
-	useEffect(() => {
-		fetchMessages();
-	}, [selectedChat]);
+		if (!typing) {
+			setTyping(true);
+			socket.emit("typing", selectedChat._id);
+		}
+
+		let lastTypingTime = new Date().getTime();
+
+		setTimeout(() => {
+			let timeNow = new Date().getTime();
+			let timeDiff = timeNow - lastTypingTime;
+
+			if (timeDiff >= 3000 && typing) {
+				socket.emit("stop typing", selectedChat._id);
+				setTyping(false);
+			}
+		}, 3000);
+	};
 
 	return (
 		<>
@@ -122,6 +179,22 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 									<ScrollableChat messages={messages} />
 								</div>
 								<FormControl onKeyDown={sendMessage} isRequired mt={3}>
+									{isTyping && (
+										<span
+											style={{
+												backgroundColor: "#000",
+												color: "#fff",
+												marginLeft: "33px",
+												marginBottom: "10px",
+												borderRadius: "20px",
+												padding: "5px 15px",
+												display: "inline-block",
+											}}
+										>
+											Typing . . .
+										</span>
+									)}
+
 									<Input
 										variant="filled"
 										bg="#e0e0e0"
