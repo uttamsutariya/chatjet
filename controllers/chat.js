@@ -99,7 +99,7 @@ exports.createGroupChat = asyncHandler(async (req, res, next) => {
 
 	return res.status(201).json({
 		status: "success",
-		message: "new group chat created",
+		message: "Group created successfully",
 		data: {
 			groupChat: fullGroupChat,
 		},

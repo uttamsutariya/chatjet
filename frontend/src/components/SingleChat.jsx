@@ -8,10 +8,64 @@ import { useAuthState, useChatState } from "../context";
 import { getSender, getFullSender } from "../config/ChatLogics";
 import ProfileModal from "./miscellaneous/ProfileModel";
 import UpdateGroupChatModel from "./miscellaneous/UpdateGroupChatModel";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import ScrollableChat from "./miscellaneous/ScrollableChat";
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 	const { user } = useAuthState();
 	const { selectedChat, setSelectedChat } = useChatState();
+	const [messages, setMessages] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const [newMessage, setNewMessage] = useState("");
+
+	const sendMessage = async (e) => {
+		if (e.key == "Enter" && newMessage) {
+			try {
+				setNewMessage("");
+
+				const {
+					data: {
+						data: { message },
+					},
+				} = await axios.post("/api/message", {
+					message: newMessage,
+					chatId: selectedChat._id,
+				});
+
+				setMessages([...messages, message]);
+			} catch (error) {
+				toast.error(error?.response?.data?.message);
+			}
+		}
+	};
+
+	const fetchMessages = async () => {
+		if (!selectedChat) return;
+
+		try {
+			const {
+				data: {
+					data: { messages },
+				},
+			} = await axios.get(`/api/message/${selectedChat._id}`);
+
+			setMessages(messages);
+			setLoading(false);
+		} catch (error) {
+			toast.error("Failed to load the messages");
+		}
+	};
+
+	const typingHandler = (e) => {
+		setNewMessage(e.target.value);
+
+		// typing indicator logic
+	};
+
+	useEffect(() => {
+		fetchMessages();
+	}, [selectedChat]);
 
 	return (
 		<>
@@ -33,15 +87,17 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 						/>
 						{!selectedChat?.isGroupChat ? (
 							<>
-								{console.log(user)}
-								{console.log(selectedChat)}
 								{getSender(user, selectedChat?.users)}
 								<ProfileModal user={getFullSender(user, selectedChat?.users)} />
 							</>
 						) : (
 							<>
 								{selectedChat?.chatName?.toUpperCase()}
-								<UpdateGroupChatModel fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
+								<UpdateGroupChatModel
+									fetchAgain={fetchAgain}
+									setFetchAgain={setFetchAgain}
+									fetchMessages={fetchMessages}
+								/>
 							</>
 						)}
 					</Text>
@@ -56,7 +112,28 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 						h="100%"
 						borderRadius="lg"
 						overflowY="hidden"
-					></Box>
+					>
+						{loading ? (
+							<Spinner size="xl" w={20} h={20} alignSelf="center" margin="auto" />
+						) : (
+							<>
+								<div className="messages">
+									{/* messages */}
+									<ScrollableChat messages={messages} />
+								</div>
+								<FormControl onKeyDown={sendMessage} isRequired mt={3}>
+									<Input
+										variant="filled"
+										bg="#e0e0e0"
+										placeholder="Enter a message ..."
+										onChange={typingHandler}
+										value={newMessage}
+										name="message"
+									/>
+								</FormControl>
+							</>
+						)}
+					</Box>
 				</>
 			) : (
 				<Box display="flex" alignItems="center" justifyContent="center" h="100%">

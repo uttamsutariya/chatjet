@@ -3,6 +3,7 @@ const generateToken = require("../config/generateToken");
 const CustomError = require("../utils/customError");
 const { cookieToken } = require("../utils/cookieToken");
 const cloudinary = require("cloudinary").v2;
+const jwt = require("jsonwebtoken");
 
 // models
 const User = require("../models/user");
@@ -13,16 +14,21 @@ const User = require("../models/user");
 
 // /api/user?search=xyz
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
-	const keyword = req.query.search
-		? {
-				$or: [
-					{ name: { $regex: req.query.search, $options: "i" } },
-					{ email: { $regex: req.query.search, $options: "i" } },
-				],
-		  }
-		: {};
+	if (!req.query.search) {
+		return res.status(200).json({
+			status: "success",
+			data: {
+				users: [],
+			},
+		});
+	}
 
-	const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+	const users = await User.find({
+		$or: [
+			{ name: { $regex: req.query.search, $options: "i" } },
+			{ email: { $regex: req.query.search, $options: "i" } },
+		],
+	}).find({ _id: { $ne: req.user._id } });
 
 	return res.status(200).json({
 		status: "success",
@@ -38,7 +44,7 @@ exports.getAllUsers = asyncHandler(async (req, res, next) => {
 
 // register (signup)
 exports.registerUser = asyncHandler(async (req, res, next) => {
-	const { name, email, password, pic } = req.body;
+	const { name, email, password } = req.body;
 
 	if (!email || !password || !name) {
 		return next(new CustomError("Name, email & password are required", 400));
@@ -56,6 +62,8 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 		password,
 	};
 
+	// let pic;
+
 	if (req.files) {
 		let profilePic = req.files.pic;
 
@@ -63,8 +71,12 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 			folder: "users",
 		});
 
-		userData = { ...userData, pic: secure_url };
+		pic = secure_url;
+	} else {
+		pic = `https://api.multiavatar.com/${name}.png?apikey=${process.env.MULTIAVATAR_APIKEY}`;
 	}
+
+	userData = { ...userData, pic };
 
 	// create user
 	user = await User.create(userData);

@@ -21,7 +21,7 @@ import UserListItem from "../user/UserListItem";
 import { useAuthState, useChatState } from "../../context";
 import { toast } from "react-toastify";
 
-const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain }) => {
+const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { selectedChat, setSelectedChat } = useChatState();
 	const { user } = useAuthState();

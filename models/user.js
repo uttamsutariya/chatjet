@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema(
 		pic: {
 			type: String,
 			required: [true, "Profile picture is required"],
-			default: "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
+			default: null,
 		},
 	},
 	{
