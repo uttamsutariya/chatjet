@@ -1,5 +1,6 @@
 import { loginUser, logout, signupUser } from "./actions";
 import { AuthProvider } from "./AuthContext";
-import { useAuthDispatch, useAuthState } from "./hooks";
+import { ChatProvider } from "./ChatContext";
+import { useAuthDispatch, useAuthState, useChatState } from "./hooks";
 
-export { AuthProvider, useAuthState, useAuthDispatch, loginUser, logout, signupUser };
+export { AuthProvider, ChatProvider, useAuthState, useAuthDispatch, useChatState, loginUser, logout, signupUser };

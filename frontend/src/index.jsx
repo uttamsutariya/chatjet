@@ -4,8 +4,8 @@ import App from "./App";
 import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter } from "react-router-dom";
 
-// auth provider
-import { AuthProvider } from "./context";
+// auth & chat provider
+import { AuthProvider, ChatProvider } from "./context";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,21 +13,23 @@ import "react-toastify/dist/ReactToastify.css";
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<React.StrictMode>
 		<AuthProvider>
-			<BrowserRouter>
-				<ChakraProvider>
-					<ToastContainer
-						autoClose={3000}
-						hideProgressBar={true}
-						newestOnTop={false}
-						closeOnClick={true}
-						closeButton={false}
-						limit={2}
-						position="bottom-center"
-						theme="colored"
-					/>
-					<App />
-				</ChakraProvider>
-			</BrowserRouter>
+			<ChatProvider>
+				<BrowserRouter>
+					<ChakraProvider>
+						<ToastContainer
+							autoClose={500}
+							hideProgressBar={true}
+							newestOnTop={false}
+							closeOnClick={true}
+							closeButton={false}
+							limit={2}
+							position="bottom-center"
+							theme="dark"
+						/>
+						<App />
+					</ChakraProvider>
+				</BrowserRouter>
+			</ChatProvider>
 		</AuthProvider>
 	</React.StrictMode>
 );
