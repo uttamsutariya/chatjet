@@ -5,21 +5,21 @@
 # Features ⭐
 
 -   [x] Real time chat with one to one & group chat
--   [x]Ream time notification on new message received
+-   [x] Ream time notification on new message received
 -   [x] Typing indicator on opponent typing (real time)
--   [x]Create group Chat
--   [x]Create one to one chat
--   [x]Group admin functionality
--   [x]Add & remove users from group & rename group
--   [x]Leave group
--   [x]Search Users
--   [x]View user's profile
--   [x]Custom image avatar on signup
--   [x]Signup & login user
--   [ ]Forgot password
--   [ ]Reset password
-    <br>
-    <br>
+-   [x] Create group Chat
+-   [x] Create one to one chat
+-   [x] Group admin functionality
+-   [x] Add & remove users from group & rename group
+-   [x] Leave group
+-   [x] Search Users
+-   [x] View user's profile
+-   [x] Custom image avatar on signup
+-   [x] Signup & login user
+-   [ ] Forgot password
+-   [ ] Reset password
+        <br>
+        <br>
 
 # Technologies Used 💻
 
