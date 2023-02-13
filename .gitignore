@@ -28,3 +28,4 @@ vercel.json
 *.njsproj
 *.sln
 *.sw?
+.vercel
