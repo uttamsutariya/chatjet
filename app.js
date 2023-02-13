@@ -2,6 +2,7 @@ const express = require("express");
 const globalErrorHandler = require("./middlewares/globalErrorHandler");
 const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
+const path = require("path");
 
 // app initialization
 const app = express();
@@ -27,8 +28,12 @@ app.use("/api/user", userRoute);
 app.use("/api/chat", chatRoute);
 app.use("/api/message", messageRoute);
 
-app.get("/", (req, res) => {
-	res.send("<h1>ChatJet🚀 API is awesome</h1>");
+// middleware for access frontend
+const buildPath = path.normalize(path.join(__dirname, "/frontend/dist"));
+app.use(express.static(buildPath));
+
+app.get("*", (req, res) => {
+	res.sendFile(path.join(buildPath, "index.html"));
 });
 
 // error handling
