@@ -80,9 +80,9 @@ const Login = () => {
 			>
 				Login
 			</Button>
-			<Button fontWeight="thin" variant="solid" colorScheme="red" width="100%">
+			{/* <Button fontWeight="thin" variant="solid" colorScheme="red" width="100%">
 				Forgot Password ?
-			</Button>
+			</Button> */}
 		</VStack>
 	);
 };

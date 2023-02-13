@@ -11,7 +11,6 @@ import UpdateGroupChatModel from "./miscellaneous/UpdateGroupChatModel";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import ScrollableChat from "./miscellaneous/ScrollableChat";
-import Typing from "../assets/animations/typing.gif";
 
 // socket
 
@@ -21,7 +20,7 @@ let socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 	const { user } = useAuthState();
-	const { selectedChat, setSelectedChat } = useChatState();
+	const { selectedChat, setSelectedChat, notification, setNotification } = useChatState();
 	const [messages, setMessages] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [newMessage, setNewMessage] = useState("");
@@ -48,7 +47,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 	useEffect(() => {
 		socket.on("message received", (newMessage) => {
 			if (!selectedChatCompare || selectedChatCompare._id != newMessage.chat._id) {
-				// give notification
+				if (!notification.includes(newMessage)) {
+					setNotification([newMessage, ...notification]);
+					setFetchAgain((prev) => !prev);
+				}
 			} else {
 				// add to list of messages
 				setMessages([...messages, newMessage]);
