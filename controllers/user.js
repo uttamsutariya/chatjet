@@ -1,5 +1,4 @@
 const asyncHandler = require("express-async-handler");
-const generateToken = require("../config/generateToken");
 const CustomError = require("../utils/customError");
 const { cookieToken } = require("../utils/cookieToken");
 const cloudinary = require("cloudinary").v2;

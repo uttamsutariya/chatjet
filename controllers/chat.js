@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Chat = require("../models/chat");
+const Message = require("../models/message");
 const User = require("../models/user");
 const CustomError = require("../utils/customError");
 
@@ -181,5 +182,28 @@ exports.removeFromGroup = asyncHandler(async (req, res, next) => {
 		data: {
 			groupChat: removed,
 		},
+	});
+});
+
+exports.deleteGroup = asyncHandler(async (req, res, next) => {
+	const { chatId } = req.params;
+
+	if (!chatId) return next(new CustomError("Provide chatId", 400));
+
+	const groupChat = await Chat.findById(chatId);
+
+	if (!groupChat) return next(new CustomError("Chat not found with this id", 400));
+
+	if (groupChat.groupAdmin.toString() != req.user._id.toString())
+		return next(new CustomError("Only admin can delete group", 400));
+
+	await Chat.deleteOne({ _id: chatId });
+
+	await Message.deleteMany({ chat: chatId });
+
+	res.status(200).json({
+		status: "success",
+		message: "group deleted",
+		data: { chatId },
 	});
 });

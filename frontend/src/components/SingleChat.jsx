@@ -204,6 +204,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 										onChange={typingHandler}
 										value={newMessage}
 										name="message"
+										autoComplete="off"
 									/>
 								</FormControl>
 							</>

@@ -146,6 +146,7 @@ const SideDrawer = () => {
 								value={search}
 								name="search"
 								onChange={(e) => setSearch(e.target.value)}
+								autoComplete="off"
 							/>
 							{/* <Button onClick={handleSearch}>Go</Button> */}
 						</Box>

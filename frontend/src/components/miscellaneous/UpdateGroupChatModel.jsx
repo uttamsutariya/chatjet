@@ -27,7 +27,6 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
 	const { user } = useAuthState();
 
 	const [groupChatName, setGroupChatName] = useState();
-	const [search, setSearch] = useState("");
 	const [searchResult, setSearchResult] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [renameloading, setRenameLoading] = useState(false);
@@ -119,6 +118,18 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
 		setGroupChatName("");
 	};
 
+	const handleDelete = async (chatId) => {
+		try {
+			await axios.delete(`/api/chat/group-delete/${chatId}`);
+			toast.success("Group deleted");
+		} catch (error) {
+			toast.error(error?.response?.data?.message);
+		} finally {
+			onClose();
+			setFetchAgain((prev) => !prev);
+		}
+	};
+
 	const handleSearch = async (query) => {
 		if (!query) {
 			setSearchResult([]);
@@ -159,35 +170,44 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
 									key={u._id}
 									user={u}
 									admin={selectedChat?.groupAdmin}
-									handleFunction={() => handleRemove(u)}
+									handleFunction={() =>
+										selectedChat?.groupAdmin?._id == user._id ? handleRemove(u) : {}
+									}
+									showCloseBtn={selectedChat?.groupAdmin?._id == user._id ? true : false}
 								/>
 							))}
 						</Box>
-						<FormControl display="flex">
-							<Input
-								placeholder="Chat Name"
-								mb={3}
-								value={groupChatName}
-								name="chatName"
-								onChange={(e) => setGroupChatName(e.target.value)}
-							/>
-							<Button
-								variant="solid"
-								colorScheme="teal"
-								ml={1}
-								isLoading={renameloading}
-								onClick={handleRename}
-							>
-								Update
-							</Button>
-						</FormControl>
-						<FormControl>
-							<Input
-								placeholder="Add User to group"
-								mb={1}
-								onChange={(e) => handleSearch(e.target.value)}
-							/>
-						</FormControl>
+						{selectedChat?.groupAdmin?._id == user._id ? (
+							<>
+								<FormControl display="flex">
+									<Input
+										placeholder="Chat Name"
+										mb={3}
+										value={groupChatName}
+										name="chatName"
+										onChange={(e) => setGroupChatName(e.target.value)}
+										autoComplete="off"
+									/>
+									<Button
+										variant="solid"
+										colorScheme="teal"
+										ml={1}
+										isLoading={renameloading}
+										onClick={handleRename}
+									>
+										Update
+									</Button>
+								</FormControl>
+								<FormControl>
+									<Input
+										placeholder="Add User to group"
+										mb={1}
+										onChange={(e) => handleSearch(e.target.value)}
+										autoComplete="off"
+									/>
+								</FormControl>
+							</>
+						) : null}
 
 						{loading ? (
 							<p>loading ...</p>
@@ -199,9 +219,19 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
 					</ModalBody>
 
 					<ModalFooter>
-						<Button onClick={() => handleRemove(user)} colorScheme="red">
-							Leave Group
-						</Button>
+						{selectedChat?.groupAdmin._id == user._id ? (
+							<>
+								<Button onClick={() => handleDelete(selectedChat._id)} colorScheme="red">
+									Delete Group
+								</Button>
+							</>
+						) : (
+							<>
+								<Button onClick={() => handleRemove(user)} colorScheme="red">
+									Leave Group
+								</Button>
+							</>
+						)}
 					</ModalFooter>
 				</ModalContent>
 			</Modal>

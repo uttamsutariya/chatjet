@@ -1,7 +1,7 @@
 import { CloseIcon } from "@chakra-ui/icons";
 import { Badge } from "@chakra-ui/layout";
 
-const UserBadgeItem = ({ user, handleFunction, admin }) => {
+const UserBadgeItem = ({ user, handleFunction, admin, showCloseBtn }) => {
 	return (
 		<Badge
 			px={2}
@@ -9,15 +9,15 @@ const UserBadgeItem = ({ user, handleFunction, admin }) => {
 			borderRadius="lg"
 			m={1}
 			mb={2}
-			variant="subtle"
+			variant="outline"
 			fontSize={12}
-			colorScheme="pink"
+			colorScheme="facebook"
 			cursor="pointer"
 			onClick={handleFunction}
 		>
-			{user.name}
-			{admin === user._id && <span> (Admin)</span>}
-			<CloseIcon pl={1} />
+			{user?.name}
+			{admin?._id == user?._id && <span> (Admin)</span>}
+			{showCloseBtn ? <CloseIcon pl={1} /> : null}
 		</Badge>
 	);
 };

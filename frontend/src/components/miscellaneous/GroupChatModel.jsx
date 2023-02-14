@@ -116,6 +116,7 @@ const GroupChatModel = ({ children }) => {
 								value={groupChatName}
 								mb={3}
 								onChange={(e) => setGroupChatName(e.target.value)}
+								autoComplete="off"
 							/>
 						</FormControl>
 						<FormControl>
@@ -123,11 +124,17 @@ const GroupChatModel = ({ children }) => {
 								placeholder="Add Users eg: Rock, Jack, Dominic"
 								mb={1}
 								onChange={(e) => handleSearch(e.target.value)}
+								autoComplete="off"
 							/>
 						</FormControl>
 						<Box w="100%" d="flex" flexWrap="wrap">
 							{selectedUsers.map((u) => (
-								<UserBadgeItem key={u._id} user={u} handleFunction={() => handleDelete(u)} />
+								<UserBadgeItem
+									key={u._id}
+									user={u}
+									showCloseBtn={true}
+									handleFunction={() => handleDelete(u)}
+								/>
 							))}
 						</Box>
 						{loading ? (
