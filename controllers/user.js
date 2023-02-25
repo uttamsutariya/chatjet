@@ -13,15 +13,6 @@ const User = require("../models/user");
 
 // /api/user?search=xyz
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
-	if (!req.query.search) {
-		return res.status(200).json({
-			status: "success",
-			data: {
-				users: [],
-			},
-		});
-	}
-
 	const users = await User.find({
 		$or: [
 			{ name: { $regex: req.query.search, $options: "i" } },
