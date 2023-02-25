@@ -15,7 +15,7 @@ import ScrollableChat from "./miscellaneous/ScrollableChat";
 // socket
 
 import io from "socket.io-client";
-const ENDPOINT = "http://43.204.177.160:5050";
+const ENDPOINT = "http://uttamsutariya.me:5050";
 let socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
