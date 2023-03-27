@@ -15,7 +15,7 @@ import ScrollableChat from "./miscellaneous/ScrollableChat";
 // socket
 
 import io from "socket.io-client";
-const ENDPOINT = import.meta.env.VITE_API_URL;
+const ENDPOINT = "https://chatjet.vercel.app";
 let socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
