@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const globalErrorHandler = require("./middlewares/globalErrorHandler");
 const cookieParser = require("cookie-parser");
@@ -12,9 +13,11 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+console.log(process.env.CLIENT_URL);
+
 app.use(
 	cors({
-		origin: process.env.CLIENT_URL,
+		origin: "*",
 		methods: ["GET", "PUT", "POST", "PATCH"],
 		allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
 		credentials: true,
