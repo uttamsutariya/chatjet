@@ -4,7 +4,7 @@
 	"description": "A real time chat app(chatjet) built with MERN stack",
 	"main": "index.js",
 	"scripts": {
-		"start": "node index.js",
+		"start": "npm i --prefix frontend && npm run build --prefix frontend && node index.js",
 		"dev": "nodemon index.js"
 	},
 	"keywords": [],
@@ -14,6 +14,7 @@
 		"bcryptjs": "^2.4.3",
 		"cloudinary": "^1.33.0",
 		"cookie-parser": "^1.4.6",
+		"cors": "^2.8.5",
 		"dotenv": "^16.0.3",
 		"express": "^4.18.2",
 		"express-async-handler": "^1.2.0",
