@@ -7,6 +7,8 @@ const jwt = require("jsonwebtoken");
 // models
 const User = require("../models/user");
 
+const { MULTIAVATAR_APIKEY, JWT_SECRET } = require("../config");
+
 /**
  * controllers
  */
@@ -63,7 +65,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 
 		pic = secure_url;
 	} else {
-		pic = `https://api.multiavatar.com/${name}.png?apikey=${process.env.MULTIAVATAR_APIKEY}`;
+		pic = `https://api.multiavatar.com/${name}.png?apikey=${MULTIAVATAR_APIKEY}`;
 	}
 
 	userData = { ...userData, pic };
@@ -114,7 +116,7 @@ exports.loadUser = asyncHandler(async (req, res, next) => {
 			},
 		});
 
-	const decode = jwt.verify(token, process.env.JWT_SECRET);
+	const decode = jwt.verify(token, JWT_SECRET);
 
 	// token invalid or expired
 	if (!decode) return next(new CustomError("Login again", 403));

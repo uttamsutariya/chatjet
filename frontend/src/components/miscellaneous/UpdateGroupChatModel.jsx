@@ -126,6 +126,7 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
 			toast.error(error?.response?.data?.message);
 		} finally {
 			onClose();
+			setSelectedChat();
 			setFetchAgain((prev) => !prev);
 		}
 	};
