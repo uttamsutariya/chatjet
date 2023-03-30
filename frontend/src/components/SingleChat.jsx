@@ -15,7 +15,10 @@ import ScrollableChat from "./miscellaneous/ScrollableChat";
 // socket
 
 import io from "socket.io-client";
+
 const ENDPOINT = import.meta.env.VITE_API_URL;
+console.log(`Socket endpoint: ` + import.meta.env.VITE_API_URL);
+
 let socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {

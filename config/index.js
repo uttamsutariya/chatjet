@@ -1,3 +1,4 @@
+require("dotenv").config();
 module.exports = {
 	PORT: process.env.port || 5050,
 	DB_URL: process.env.DB_URL,

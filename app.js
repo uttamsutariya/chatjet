@@ -15,6 +15,8 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+console.log(CLIENT_URL);
+
 app.use(
 	cors({
 		origin: CLIENT_URL,
@@ -40,6 +42,12 @@ const messageRoute = require("./routes/message");
 app.use("/api/user", userRoute);
 app.use("/api/chat", chatRoute);
 app.use("/api/message", messageRoute);
+
+app.use("/api", (req, res) => {
+	res.status(200).json({
+		message: "Chatjet api, working nice",
+	});
+});
 
 // middleware for access frontend
 const buildPath = path.normalize(path.join(__dirname, "/frontend/dist"));
