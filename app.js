@@ -6,6 +6,8 @@ const fileUpload = require("express-fileupload");
 const path = require("path");
 const cors = require("cors");
 
+const { CLIENT_URL } = require("./config");
+
 // app initialization
 const app = express();
 
@@ -13,7 +15,15 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors());
+app.use(
+	cors({
+		origin: CLIENT_URL,
+		methods: ["GET", "PUT", "POST", "PATCH", "DELETE"],
+		allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
+		credentials: true,
+		exposedHeaders: ["*", "Authorization"],
+	})
+);
 app.use(cookieParser());
 app.use(
 	fileUpload({
