@@ -2,9 +2,10 @@
 
 <br>
 
-<h3 align="center">⬇️ Live project link ⬇️
-<br>
-<a href="http://uttamsutariya.me:5050" target="_blank">http://uttamsutariya.me/chatjet</a>
+<h3 align="center">
+<b>
+<a href="http://35.154.90.17:5050" target="_blank">↗️ Take a look on live project 🔗</a>
+</b>
 </h3>
 
 <br>
@@ -23,8 +24,6 @@
 -   [x] View user's profile
 -   [x] Custom image avatar on signup
 -   [x] Signup & login user
--   [ ] Forgot password
--   [ ] Reset password
         <br>
         <br>
 
@@ -60,4 +59,4 @@
 -   [Context API](https://reactjs.org/docs/context.html) to manage state of application.
 -   [Chakra UI](https://chakra-ui.com/) for pre built UI components.
 -   [Socket.io Client](https://socket.io/docs/v4/client-installation/) to connect with socket from client side.
--   [Vite](https://vitejs.dev/) for managing frontend development environment.
+-   [Vite](https://vitejs.dev/) to manage frontend development environment.
