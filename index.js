@@ -20,7 +20,8 @@ const server = app.listen(PORT, () => console.log(`App server started on port:${
 const io = require("socket.io")(server, {
 	pingTimeOut: 60000,
 	cors: {
-		origin: CLIENT_URL,
+		// origin: "http://localhost:3000",
+		origin: "/",
 	},
 });
 

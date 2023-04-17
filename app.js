@@ -15,8 +15,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-console.log(CLIENT_URL);
-
 app.use(
 	cors({
 		origin: CLIENT_URL,
@@ -26,7 +24,9 @@ app.use(
 		exposedHeaders: ["*", "Authorization"],
 	})
 );
+
 app.use(cookieParser());
+
 app.use(
 	fileUpload({
 		useTempFiles: true,
@@ -50,7 +50,7 @@ app.use("/api", (req, res) => {
 });
 
 // middleware for access frontend
-const buildPath = path.normalize(path.join(__dirname, "/frontend/dist"));
+const buildPath = path.normalize(path.join(__dirname, "/client/dist"));
 app.use(express.static(buildPath));
 
 app.get("*", (req, res) => {
